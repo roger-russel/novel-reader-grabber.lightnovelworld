@@ -1,0 +1,5 @@
+package novels
+
+func List() {
+
+}
