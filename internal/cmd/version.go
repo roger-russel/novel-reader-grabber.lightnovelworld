@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	v "novel-grabber/internal/cmd/version"
+	v "github.com/roger-russel/novel-grabber/internal/cmd/version"
 
 	"github.com/spf13/cobra"
 )

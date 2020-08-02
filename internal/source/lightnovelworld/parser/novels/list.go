@@ -1,5 +1,0 @@
-package novels
-
-func List() {
-
-}

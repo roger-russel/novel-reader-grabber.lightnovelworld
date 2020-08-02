@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"lightnovelworld-grabber/internal/cmd"
-	v "lightnovelworld-grabber/internal/cmd/version"
+	"github.com/roger-russel/novel-grabber/internal/cmd"
+	v "github.com/roger-russel/novel-grabber/internal/cmd/version"
 )
 
 var version string

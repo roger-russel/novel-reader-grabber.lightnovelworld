@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	v "novel-grabber/internal/cmd/version"
-	"novel-grabber/internal/source/lightnovelworld"
-	"os"
+	"github.com/roger-russel/novel-grabber/internal/cmd/sources"
+	v "github.com/roger-russel/novel-grabber/internal/cmd/version"
+	"github.com/roger-russel/novel-grabber/pkg/structs/cmd"
 
 	"github.com/spf13/cobra"
 )
@@ -12,26 +12,39 @@ var rootCmd *cobra.Command
 
 //Root Command
 func Root(vf v.FullVersion) {
-	checkDefaultCommand()
+
+	var flags cmd.Flags
 
 	rootCmd = &cobra.Command{
 		Use:   "novel-grabber",
 		Short: "novel-grabber",
 		Run: func(cmd *cobra.Command, args []string) {
-
-			var n lightnovelworld.Novel
-
-			n.New("")
-
+			cmd.Help()
 		},
 	}
 
 	rootCmd.AddCommand(version(vf))
+	rootCmd.AddCommand(sources.Lightnovelworld(&flags))
+
+	rootCmd.PersistentFlags().StringVarP(
+		&flags.Dir, "dir", "d", "./",
+		"The output dir: -d ~/Docs",
+	)
+
+	rootCmd.PersistentFlags().StringVarP(
+		&flags.FormatType, "format-type", "t", "mobi",
+		"The output format: -t mobi",
+	)
+
+	rootCmd.PersistentFlags().StringVarP(
+		&flags.Novel, "novel", "n", "",
+		"The novel wich will be taken: -n i-alone-level-up-solo-leveling-web-novel",
+	)
+
+	rootCmd.Execute()
 
 }
 
-func checkDefaultCommand() {
-	if len(os.Args) < 2 {
-		os.Args = append([]string{os.Args[0], "--help"}, os.Args[1:]...)
-	}
+func rootCMDHandler(flags *cmd.Flags) {
+
 }

@@ -5,14 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-          "name": "Launch",
+          "name": "lightnovelworld",
           "type": "go",
           "request": "launch",
           "mode": "auto",
           "program": "${workspaceFolder}/cmd/novel-grabber",
           "cwd": "${workspaceFolder}",
           "env": {},
-          "args": []
+          "args": ["lightnovelworld", "-d", "~/Documents/Books/Novels", "-n", "i-alone-level-up-solo-leveling-web-novel"]
+        },
+        {
+          "name": "wuxiaworld",
+          "type": "go",
+          "request": "launch",
+          "mode": "auto",
+          "program": "${workspaceFolder}/cmd/novel-grabber",
+          "cwd": "${workspaceFolder}",
+          "env": {},
+          "args": [
+            "wuxiaworld",
+            "-d",
+            "~/Documents/Books/Novels",
+            "-n",
+            "against-the-gods"
+          ]
         }
     ]
 }

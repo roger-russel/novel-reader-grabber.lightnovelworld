@@ -1,4 +1,4 @@
-package lightnovelworld
+package wuxiaworld
 
 import (
 	"fmt"
@@ -20,13 +20,14 @@ func New(n *novel.Novel, novelSlug string) {
 	n.Title, n.Author = site.Info(doc)
 	fmt.Println("Title: ", n.Title)
 
-	n.Cover = site.Cover(novelSlug, doc)
-	fmt.Println("Cover: ", n.Cover)
+	/*
+		n.Cover = site.Cover(novelSlug, doc)
+		fmt.Println("Cover: ", n.Cover)
 
-	n.Chapters = site.ChaptersList(doc)
-	fmt.Println("Chapters found: ", len(n.Chapters))
+		n.Chapters = site.ChaptersList(doc)
+		fmt.Println("Chapters found: ", len(n.Chapters))
 
-	fmt.Println("Getting Chapters Content")
-	site.Chapters(n)
-
+		fmt.Println("Getting Chapters Content")
+		site.Chapters(n)
+	*/
 }

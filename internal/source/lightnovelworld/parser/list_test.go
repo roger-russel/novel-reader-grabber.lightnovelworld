@@ -1,18 +1,21 @@
-package novel
+package parser
 
 import (
-	"io"
 	"os"
 	"testing"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/roger-russel/novel-grabber/internal/helpers"
 )
 
-func Test_parseChaptersList(t *testing.T) {
+func TestChaptersList(t *testing.T) {
 
-	rootPath := "../../../"
+	rootPath := "../../../../"
 
 	type args struct {
-		page io.Reader
+		page *goquery.Document
 	}
+
 	tests := []struct {
 		name           string
 		args           args
@@ -22,12 +25,14 @@ func Test_parseChaptersList(t *testing.T) {
 		{
 			name: "get a real novel list",
 			args: args{
-				page: func() io.Reader {
+				page: func() *goquery.Document {
 					f, err := os.Open(rootPath + "tests/fixtures/info.html")
 					if err != nil {
 						panic(err)
 					}
-					return f
+					doc, err := goquery.NewDocumentFromReader(f)
+					helpers.Must(err)
+					return doc
 				}(),
 			},
 			wantNext:       "/novel/i-alone-level-up-solo-leveling-web-novel/2",
@@ -36,7 +41,7 @@ func Test_parseChaptersList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotNext, gotList := parseChaptersList(tt.args.page)
+			gotNext, gotList := ChaptersList(tt.args.page)
 
 			if tt.wantNext != gotNext {
 				t.Errorf("Expected Next: %v got %v", tt.wantNext, gotNext)
