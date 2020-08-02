@@ -25,6 +25,7 @@ func Root(vf v.FullVersion) {
 
 	rootCmd.AddCommand(version(vf))
 	rootCmd.AddCommand(sources.Lightnovelworld(&flags))
+	rootCmd.AddCommand(sources.Wuxiaworld(&flags))
 
 	rootCmd.PersistentFlags().StringVarP(
 		&flags.Dir, "dir", "d", "./",
