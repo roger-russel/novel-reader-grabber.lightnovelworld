@@ -5,4 +5,5 @@ type Flags struct {
 	Dir        string
 	FormatType string
 	Novel      string
+	Volume     string
 }

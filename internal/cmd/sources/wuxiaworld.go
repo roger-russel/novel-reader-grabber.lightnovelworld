@@ -13,9 +13,9 @@ import (
 func Wuxiaworld(flags *cmd.Flags) (wuxiaworldCmd *cobra.Command) {
 
 	wuxiaworldCmd = &cobra.Command{
-		Use:   "Wuxiaworld",
-		Short: "Wuxiaworld source",
-		Long:  `Wuxiaworld source handler`,
+		Use:   "wuxiaworld",
+		Short: "wuxiaworld source",
+		Long:  `wuxiaworld source handler`,
 		Run: func(cmd *cobra.Command, args []string) {
 			normalizers.NormalizeFlags(flags)
 			var n *novel.Novel = &novel.Novel{}
@@ -23,6 +23,12 @@ func Wuxiaworld(flags *cmd.Flags) (wuxiaworldCmd *cobra.Command) {
 			output.Writer(n, flags.Dir, flags.FormatType)
 		},
 	}
+
+	wuxiaworldCmd.Flags().StringVarP(
+		&flags.Volume,
+		"volume", "v", "1",
+		"The volume that will be generated: -v 10",
+	)
 
 	return wuxiaworldCmd
 }
