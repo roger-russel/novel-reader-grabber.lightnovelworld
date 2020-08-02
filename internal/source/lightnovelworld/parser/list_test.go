@@ -1,16 +1,13 @@
 package parser
 
 import (
-	"os"
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/roger-russel/novel-grabber/internal/helpers"
+	"github.com/roger-russel/novel-grabber/tests/_fixtures/helpers"
 )
 
 func TestChaptersList(t *testing.T) {
-
-	rootPath := "../../../../"
 
 	type args struct {
 		page *goquery.Document
@@ -25,20 +22,13 @@ func TestChaptersList(t *testing.T) {
 		{
 			name: "get a real novel list",
 			args: args{
-				page: func() *goquery.Document {
-					f, err := os.Open(rootPath + "tests/fixtures/info.html")
-					if err != nil {
-						panic(err)
-					}
-					doc, err := goquery.NewDocumentFromReader(f)
-					helpers.Must(err)
-					return doc
-				}(),
+				page: helpers.GetFixtureDoc("lightnovelworld", "info.html"),
 			},
 			wantNext:       "/novel/i-alone-level-up-solo-leveling-web-novel/2",
 			wantListNumber: 100,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			gotNext, gotList := ChaptersList(tt.args.page)

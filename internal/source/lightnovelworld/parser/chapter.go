@@ -2,6 +2,7 @@ package parser
 
 import (
 	"io"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/roger-russel/novel-grabber/internal/helpers"
@@ -18,7 +19,7 @@ func Chapter(page io.Reader) string {
 
 	if content != nil {
 		c, _ := content.Html()
-		return c
+		return strings.TrimSpace(c)
 	}
 
 	return ""

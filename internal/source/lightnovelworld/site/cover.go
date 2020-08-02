@@ -14,7 +14,7 @@ func Cover(novelSlug string, doc *goquery.Document) (imgPath string) {
 
 	var err error
 
-	cover, found := parser.Cover(novelSlug, doc)
+	cover, found := parser.Cover(doc)
 
 	if !found {
 		log.Warningf("Fail parsing image cover url from source: %v, novel: %v, error: %v", SOURCE, novelSlug, err)
