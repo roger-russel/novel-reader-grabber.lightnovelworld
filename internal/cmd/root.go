@@ -23,10 +23,6 @@ func Root(vf v.FullVersion) {
 		},
 	}
 
-	rootCmd.AddCommand(version(vf))
-	rootCmd.AddCommand(sources.Lightnovelworld(&flags))
-	rootCmd.AddCommand(sources.Wuxiaworld(&flags))
-
 	rootCmd.PersistentFlags().StringVarP(
 		&flags.Dir, "dir", "d", "./",
 		"The output dir: -d ~/Docs",
@@ -42,10 +38,14 @@ func Root(vf v.FullVersion) {
 		"The novel wich will be taken: -n i-alone-level-up-solo-leveling-web-novel",
 	)
 
+	rootCmd.AddCommand(version(vf))
+	addSources(rootCmd, &flags)
+
 	rootCmd.Execute()
 
 }
 
-func rootCMDHandler(flags *cmd.Flags) {
-
+func addSources(rootCmd *cobra.Command, flags *cmd.Flags) {
+	rootCmd.AddCommand(sources.Lightnovelworld(flags))
+	rootCmd.AddCommand(sources.Wuxiaworld(flags))
 }
