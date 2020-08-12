@@ -5,7 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/roger-russel/novel-grabber/internal/helpers"
-	"github.com/roger-russel/novel-grabber/internal/source/lightnovelworld/parser"
+	"github.com/roger-russel/novel-grabber/internal/source/wuxiaworld/parser"
 	"github.com/roger-russel/novel-grabber/pkg/localstorage"
 )
 
@@ -14,14 +14,14 @@ func Cover(novelSlug string, doc *goquery.Document) (imgPath string) {
 
 	var err error
 
-	cover, found := parser.Cover(novelSlug, doc)
+	cover, found := parser.Cover(doc)
 
 	if !found {
 		log.Warningf("Fail parsing image cover url from source: %v, novel: %v, error: %v", SOURCE, novelSlug, err)
 		return ""
 	}
 
-	img, err := helpers.Download(URL + cover)
+	img, err := helpers.Download(cover)
 
 	if err != nil {
 		log.Warningf("Fail download image cover to source: %v, novel: %v, error: %v", SOURCE, novelSlug, err)

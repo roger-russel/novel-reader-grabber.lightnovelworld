@@ -5,7 +5,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/roger-russel/novel-grabber/internal/helpers"
-	"github.com/roger-russel/novel-grabber/internal/source/lightnovelworld/parser"
+	"github.com/roger-russel/novel-grabber/internal/source/wuxiaworld/parser"
 )
 
 //InfoPage get the info page novel

@@ -56,7 +56,11 @@ func Chapter(novelSlug string, originalNumber string, chapterURL string) string 
 
 	}
 
-	return strings.TrimSpace(content)
+	content = strings.TrimSpace(content)
+
+	localstorage.WriteChapter(SOURCE, novelSlug, originalNumber, content)
+
+	return content
 
 }
 

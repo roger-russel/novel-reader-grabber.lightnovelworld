@@ -18,7 +18,8 @@ func Write(n *novel.Novel, dir string) {
 	helpers.Must(err)
 
 	m.Title(n.Title)
-	m.Compression(mobi.CompressionNone)
+	//m.Compression(mobi.CompressionNone)
+	m.Compression(mobi.CompressionPalmDoc)
 	//ToDO add thumbnail instead of second cover
 
 	m.AddCover(n.Cover, n.Cover)

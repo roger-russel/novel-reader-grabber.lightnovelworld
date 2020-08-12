@@ -8,38 +8,28 @@ import (
 )
 
 func TestChaptersList(t *testing.T) {
-
 	type args struct {
-		page *goquery.Document
+		doc *goquery.Document
 	}
-
 	tests := []struct {
-		name           string
-		args           args
-		wantNext       string
-		wantListNumber int
+		name               string
+		args               args
+		wantChaptersNumber int
 	}{
 		{
 			name: "get a real novel list",
 			args: args{
-				page: helpers.GetFixtureDoc("wuxiaworld", "info.html"),
+				doc: helpers.GetFixtureDoc("wuxiaworld", "info-sample-list.html"),
 			},
-			wantNext:       "/novel/i-alone-level-up-solo-leveling-web-novel/2",
-			wantListNumber: 100,
+			wantChaptersNumber: 40,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotNext, gotList := ChaptersList(tt.args.page)
+			gotChapters := ChaptersList(tt.args.doc)
 
-			if tt.wantNext != gotNext {
-				t.Errorf("Expected Next: %v got %v", tt.wantNext, gotNext)
-			}
-
-			gotListNumber := len(gotList)
-
-			if tt.wantListNumber != gotListNumber {
-				t.Errorf("Expected number of chapters: %v got %v", tt.wantListNumber, gotListNumber)
+			if len(gotChapters) != tt.wantChaptersNumber {
+				t.Errorf("ChaptersList() gotChapters number = %v, want %v", gotChapters, tt.wantChaptersNumber)
 			}
 		})
 	}

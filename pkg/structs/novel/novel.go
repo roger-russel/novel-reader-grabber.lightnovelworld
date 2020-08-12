@@ -14,19 +14,28 @@ type InNovel interface {
 	New(name string)
 }
 
+//Tags list
+type Tags []string
+
+// Categories list
+type Categories []string
+
 //Novel information
 type Novel struct {
-	Author     string   `json:"author"`
-	Title      string   `json:"title"`
-	Slug       string   `json:"slug"`
-	URL        string   `json:"url"`
-	Summary    string   `json:"summary"`
-	Tags       []string `json:"tags"`
-	Categories []string `json:"categories"`
-	Chapters   Chapters `json:"chapters"`
-	Cover      string   `json:"cover"`
-	Complete   bool     `json:"complete"`
+	Author     string     `json:"author"`
+	Title      string     `json:"title"`
+	Slug       string     `json:"slug"`
+	URL        string     `json:"url"`
+	Summary    string     `json:"summary"`
+	Tags       Tags       `json:"tags"`
+	Categories Categories `json:"categories"`
+	Chapters   Chapters   `json:"chapters"`
+	Cover      string     `json:"cover"`
+	Complete   bool       `json:"complete"`
 }
+
+//Novels list
+type Novels []Novel
 
 //Chapter information
 type Chapter struct {
@@ -41,16 +50,9 @@ type Chapter struct {
 //Chapters list
 type Chapters []Chapter
 
-//Novels list
-type Novels []Novel
-
 //Sources struct
 type Sources struct {
 	Title  string `json:"title"`
 	URL    string `json:"url"`
 	Novels Novels `json:"novels"`
-}
-
-func (n *Novel) GetTitle() string {
-	return n.Title
 }

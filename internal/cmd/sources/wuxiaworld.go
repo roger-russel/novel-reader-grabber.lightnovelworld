@@ -20,15 +20,9 @@ func Wuxiaworld(flags *cmd.Flags) (wuxiaworldCmd *cobra.Command) {
 			normalizers.NormalizeFlags(flags)
 			var n *novel.Novel = &novel.Novel{}
 			wuxiaworld.New(n, flags.Novel)
-			output.Writer(n, flags.Dir, flags.FormatType)
+			output.Writer(n, flags.FormatType, flags.Dir)
 		},
 	}
-
-	wuxiaworldCmd.Flags().StringVarP(
-		&flags.Volume,
-		"volume", "v", "1",
-		"The volume that will be generated: -v 10",
-	)
 
 	return wuxiaworldCmd
 }

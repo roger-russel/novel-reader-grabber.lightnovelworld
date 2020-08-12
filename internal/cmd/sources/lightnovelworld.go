@@ -20,7 +20,7 @@ func Lightnovelworld(flags *cmd.Flags) (lightnovelworldCmd *cobra.Command) {
 			normalizers.NormalizeFlags(flags)
 			var n *novel.Novel = &novel.Novel{}
 			lightnovelworld.New(n, flags.Novel)
-			output.Writer(n, flags.Dir, flags.FormatType)
+			output.Writer(n, flags.FormatType, flags.Dir)
 		},
 	}
 

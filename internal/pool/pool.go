@@ -1,14 +1,19 @@
 package pool
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 //Pool worker
 type Pool struct {
-	size    int
-	workers map[int]func()
-	running map[int]bool
-	wg      sync.WaitGroup
-	chDone  chan int
+	size     int
+	workers  map[int]func()
+	running  map[int]bool
+	wg       sync.WaitGroup
+	chDone   chan int
+	tasks    int32 //The number of current tasks on pool
+	finished int32
 }
 
 //New Pool
@@ -25,6 +30,7 @@ func New(size int) *Pool {
 //Add Function into Pool
 func (p *Pool) Add(f func()) {
 
+	p.tasks++
 	p.wg.Add(1)
 	workerID := len(p.workers)
 	p.workers[workerID] = func() {
@@ -58,6 +64,8 @@ func (p *Pool) done() {
 		delete(p.workers, workerID)
 		delete(p.running, workerID)
 
+		p.tasks--
+		p.finished++
 		p.wg.Done()
 
 		if len(p.workers) > 0 {
@@ -70,4 +78,12 @@ func (p *Pool) done() {
 			}
 		}
 	}
+}
+
+//Status of pool
+func (p *Pool) Status() string {
+	return fmt.Sprintf("Getted: %v, Remaining: %v",
+		p.finished,
+		p.tasks,
+	)
 }

@@ -42,13 +42,11 @@ func ReadChapter(source string, novelSlug string, chapterOriginalNumber string) 
 //WriteChapter locally
 func WriteChapter(source string, novelSlug string, chapterOriginalNumber string, content string) (err error) {
 
-	filePath, err := getNovelPath(source, novelSlug)
+	filePath, err := getNovelPath(source, novelSlug+chaptersFolder)
 
 	if err != nil {
 		return err
 	}
-
-	filePath += chaptersFolder
 
 	f, err := os.Create(filePath + "/" + chapterOriginalNumber + ext)
 

@@ -1,10 +1,10 @@
 package parser
 
 import (
-	"os"
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/roger-russel/novel-grabber/tests/_fixtures/helpers"
 )
 
 func must(err error) {
@@ -13,8 +13,6 @@ func must(err error) {
 	}
 }
 func TestInfo(t *testing.T) {
-
-	fixtures := "../../../../tests/fixtures/wuxiaworld/"
 
 	type args struct {
 		doc *goquery.Document
@@ -28,16 +26,7 @@ func TestInfo(t *testing.T) {
 		{
 			name: "get author",
 			args: args{
-				doc: func() (doc *goquery.Document) {
-					file := fixtures + "info.html"
-					f, err := os.Open(file)
-					must(err)
-
-					doc, err = goquery.NewDocumentFromReader(f)
-					must(err)
-
-					return doc
-				}(),
+				doc: helpers.GetFixtureDoc("wuxiaworld", "info.html"),
 			},
 			wantTitle:  "Against the Gods",
 			wantAuthor: "Mars Gravity",

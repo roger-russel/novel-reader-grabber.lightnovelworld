@@ -6,7 +6,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/roger-russel/novel-grabber/internal/helpers"
 	"github.com/roger-russel/novel-grabber/internal/pool"
-	"github.com/roger-russel/novel-grabber/internal/source/lightnovelworld/parser"
+	"github.com/roger-russel/novel-grabber/internal/source/wuxiaworld/parser"
 	"github.com/roger-russel/novel-grabber/pkg/localstorage"
 	"github.com/roger-russel/novel-grabber/pkg/structs/novel"
 	log "github.com/sirupsen/logrus"
@@ -18,19 +18,8 @@ const pullSize int = 10
 func ChaptersList(doc *goquery.Document) novel.Chapters {
 	var chapters novel.Chapters
 
-	next, cha := parser.ChaptersList(doc)
+	cha := parser.ChaptersList(doc)
 	chapters = append(chapters, cha...)
-
-	for next != "" {
-		infoPage, err := helpers.Download(URL + next)
-		helpers.Must(err)
-
-		doc, err := goquery.NewDocumentFromReader(infoPage)
-		helpers.Must(err)
-
-		next, cha = parser.ChaptersList(doc)
-		chapters = append(chapters, cha...)
-	}
 
 	return chapters
 
@@ -56,7 +45,11 @@ func Chapter(novelSlug string, originalNumber string, chapterURL string) string 
 
 	}
 
-	return strings.TrimSpace(content)
+	content = strings.TrimSpace(content)
+
+	localstorage.WriteChapter(SOURCE, novelSlug, originalNumber, content)
+
+	return content
 
 }
 
@@ -80,6 +73,8 @@ func Chapters(n *novel.Novel) {
 				return func() {
 					content := Chapter(slug, originalNumber, URL)
 
+					log.Info(pl.Status())
+
 					ch <- chChapter{
 						Index:   index,
 						Content: content,
@@ -87,6 +82,7 @@ func Chapters(n *novel.Novel) {
 				}
 			}(index, n.Slug, n.Chapters[index].OriginalNumber, n.Chapters[index].URL),
 		)
+
 	}
 
 	pl.Run()

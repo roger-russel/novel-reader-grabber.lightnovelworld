@@ -2,67 +2,65 @@ package parser
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/gosimple/slug"
 	"github.com/roger-russel/novel-grabber/pkg/structs/novel"
 	log "github.com/sirupsen/logrus"
 )
 
 //ChaptersList generator the list of chapters
-func ChaptersList(doc *goquery.Document) (nextURL string, chapters novel.Chapters) {
+func ChaptersList(doc *goquery.Document) (chapters novel.Chapters) {
 
-	doc.Find("ul.chapter-list li").Each(func(i int, s *goquery.Selection) {
+	root := doc.Find(".panel-group")
+	root.Find(".panel.panel-default .chapter-item a").Each(
+		func(number int, s *goquery.Selection) {
 
-		var err error
+			var err error
 
-		title := strings.TrimSpace(s.Find(".chapter-title").Text())
+			title := strings.TrimSpace(s.Text())
 
-		sNumber := strings.TrimSpace(s.Find(".chapter-no").Text())
+			sNumber := title
 
-		number, err := strconv.Atoi(sNumber)
+			if err != nil {
+				log.WithFields(log.Fields{
+					"title":  title,
+					"number": number,
+				}).Warning(fmt.Sprintf("Chapter with title \"%v\" has an invalid number: %v", title, sNumber))
+				return
+			}
 
-		if err != nil {
-			log.WithFields(log.Fields{
-				"title":  title,
-				"number": sNumber,
-			}).Warning(fmt.Sprintf("Chapter with title \"%v\" has an invalid number: %v", title, sNumber))
-			return
-		}
+			url, found := s.Attr("href")
 
-		updated, found := s.Find(".chapter-update").Attr("datetime")
+			if !found {
+				log.WithFields(log.Fields{
+					"title":  title,
+					"number": sNumber,
+				}).Warning(fmt.Sprintf("Could not found the url from chapter \"%v\"", sNumber))
+			}
 
-		if !found {
-			updated = "n/a"
-		}
+			chapters = append(chapters, novel.Chapter{
+				Number:         number,
+				OriginalNumber: normalizer(title),
+				Title:          title,
+				URL:            url,
+				Updated:        "n/a",
+			})
+		},
+	)
 
-		url, found := s.Find("a").Attr("href")
+	return chapters
 
-		if !found {
-			log.WithFields(log.Fields{
-				"title":   title,
-				"number":  sNumber,
-				"updated": updated,
-			}).Warning(fmt.Sprintf("Could not found the url from chapter \"%v\"", sNumber))
-		}
+}
 
-		chapters = append(chapters, novel.Chapter{
-			Number:         number,
-			OriginalNumber: sNumber,
-			Title:          title,
-			URL:            url,
-			Updated:        updated,
-		})
+func normalizer(title string) string {
+	title = slug.Make(title)
 
-	})
-
-	nextPage := doc.Find(".PagedList-skipToNext a").First()
-
-	if nextPage != nil {
-		nextURL = nextPage.AttrOr("href", "")
+	if title == "prologue" {
+		title = "chapter-0-prologue"
 	}
 
-	return nextURL, chapters
+	return title
 
 }
