@@ -2,65 +2,119 @@ package parser
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gosimple/slug"
 	"github.com/roger-russel/novel-grabber/pkg/structs/novel"
 	log "github.com/sirupsen/logrus"
 )
 
 //ChaptersList generator the list of chapters
-func ChaptersList(doc *goquery.Document) (chapters novel.Chapters) {
+func ChaptersList(doc *goquery.Document) (volumes novel.Volumes) {
 
 	root := doc.Find(".panel-group")
-	root.Find(".panel.panel-default .chapter-item a").Each(
-		func(number int, s *goquery.Selection) {
 
-			var err error
+	root.Find(".panel.panel-default").Each(
+		func(i int, v *goquery.Selection) {
+			var number int
+			var title string
 
-			title := strings.TrimSpace(s.Text())
+			sPanel := v.Find(".panel-title").First()
+			sNumber := sPanel.Find(".book").First()
 
-			sNumber := title
+			if sNumber != nil {
+				var err error
 
-			if err != nil {
-				log.WithFields(log.Fields{
-					"title":  title,
-					"number": number,
-				}).Warning(fmt.Sprintf("Chapter with title \"%v\" has an invalid number: %v", title, sNumber))
-				return
+				number, err = strconv.Atoi(sNumber.Text())
+
+				if err != nil {
+					log.Warning(err)
+				}
+
+			} else {
+				number = i
 			}
 
-			url, found := s.Attr("href")
+			sTitle := sPanel.Find(".title a").First()
 
-			if !found {
-				log.WithFields(log.Fields{
-					"title":  title,
-					"number": sNumber,
-				}).Warning(fmt.Sprintf("Could not found the url from chapter \"%v\"", sNumber))
+			if sTitle != nil {
+				title = sTitle.Text()
 			}
 
-			chapters = append(chapters, novel.Chapter{
-				Number:         number,
-				OriginalNumber: normalizer(title),
-				Title:          title,
-				URL:            url,
-				Updated:        "n/a",
+			volume := novel.Volume{
+				Title:  strings.TrimSpace(title),
+				Number: number,
+			}
+
+			chapters := &novel.Chapters{}
+			v.Find(".chapter-item a").Each(func(n int, c *goquery.Selection) {
+				parseChapters(chapters, n, c)
 			})
+
+			volume.Chapters = chapters
+
+			volumes = append(volumes, volume)
+
 		},
 	)
 
-	return chapters
+	return volumes
 
 }
 
-func normalizer(title string) string {
-	title = slug.Make(title)
+func parseChapters(chapters *novel.Chapters, n int, c *goquery.Selection) {
 
-	if title == "prologue" {
-		title = "chapter-0-prologue"
+	var err error
+
+	title := strings.TrimSpace(c.Text())
+
+	url, found := c.Attr("href")
+
+	if !found {
+		log.WithFields(log.Fields{
+			"title": title,
+		}).Warning(fmt.Sprintf("Could not found the url from chapter \"%v\"", url))
 	}
 
-	return title
+	sNumber, number, err := normalizer(url)
+
+	if err != nil {
+		log.WithFields(log.Fields{
+			"title": title,
+			"url":   url,
+		}).Warning(fmt.Sprintf("Chapter with title \"%v\" has an invalid url to extract number: %v", title, url))
+		return
+	}
+
+	*chapters = append(*chapters, novel.Chapter{
+		Number:         number,
+		OriginalNumber: sNumber,
+		Title:          title,
+		URL:            url,
+		Updated:        "n/a",
+	})
+}
+
+func normalizer(url string) (string, int, error) {
+	var sNumber string
+
+	re := regexp.MustCompile("([0-9]+)(-([0-9]+))?$")
+	m := re.FindStringSubmatch(url)
+
+	if m == nil {
+		return "", 0, fmt.Errorf("Could not parse chapter number from url: %v", url)
+	}
+
+	sNumber = m[1]
+
+	if m[3] != "" {
+		sNumber += "." + m[3]
+	}
+
+	number, err := strconv.Atoi(m[1])
+
+	return sNumber, number, err
 
 }

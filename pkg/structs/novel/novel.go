@@ -30,12 +30,23 @@ type Novel struct {
 	Tags       Tags       `json:"tags"`
 	Categories Categories `json:"categories"`
 	Chapters   Chapters   `json:"chapters"`
+	Volumes    Volumes    `json:"volumes"`
 	Cover      string     `json:"cover"`
 	Complete   bool       `json:"complete"`
 }
 
 //Novels list
 type Novels []Novel
+
+//Volumes List
+type Volumes []Volume
+
+//Volume information
+type Volume struct {
+	Title    string    `json:"title"`
+	Chapters *Chapters `json:"chapter"`
+	Number   int       `json:"number"`
+}
 
 //Chapter information
 type Chapter struct {

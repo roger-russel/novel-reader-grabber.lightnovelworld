@@ -14,14 +14,13 @@ import (
 
 const pullSize int = 10
 
-//ChaptersList get the novel info Page
-func ChaptersList(doc *goquery.Document) novel.Chapters {
-	var chapters novel.Chapters
+//VolumesList get the novel info Page
+func VolumesList(doc *goquery.Document) (volumes novel.Volumes) {
 
-	cha := parser.ChaptersList(doc)
-	chapters = append(chapters, cha...)
+	vol := parser.ChaptersList(doc)
+	volumes = append(volumes, vol...)
 
-	return chapters
+	return volumes
 
 }
 
@@ -56,6 +55,7 @@ func Chapter(novelSlug string, originalNumber string, chapterURL string) string 
 type chChapter struct {
 	Index   int
 	Content string
+	Volume  int
 }
 
 //Chapters get all Chapter
@@ -66,23 +66,22 @@ func Chapters(n *novel.Novel) {
 
 	go updateContent(ch, n)
 
-	for index := range n.Chapters {
-
-		pl.Add(
-			func(index int, slug string, originalNumber string, URL string) func() {
-				return func() {
-					content := Chapter(slug, originalNumber, URL)
-
-					log.Info(pl.Status())
-
-					ch <- chChapter{
-						Index:   index,
-						Content: content,
+	for volIndex, v := range n.Volumes {
+		for chIndex := range *v.Chapters {
+			pl.Add(
+				func(volIndex, chIndex int, slug string, originalNumber string, URL string) func() {
+					return func() {
+						content := Chapter(slug, originalNumber, URL)
+						log.Debug(pl.Status())
+						ch <- chChapter{
+							Index:   chIndex,
+							Content: content,
+							Volume:  volIndex,
+						}
 					}
-				}
-			}(index, n.Slug, n.Chapters[index].OriginalNumber, n.Chapters[index].URL),
-		)
-
+				}(volIndex, chIndex, n.Slug, (*v.Chapters)[chIndex].OriginalNumber, (*v.Chapters)[chIndex].URL),
+			)
+		}
 	}
 
 	pl.Run()
@@ -91,6 +90,6 @@ func Chapters(n *novel.Novel) {
 
 func updateContent(ch chan chChapter, n *novel.Novel) {
 	for c := range ch {
-		n.Chapters[c.Index].Content = c.Content
+		(*n.Volumes[c.Volume].Chapters)[c.Index].Content = c.Content
 	}
 }

@@ -22,10 +22,15 @@ func New(n *novel.Novel, novelSlug string) {
 	n.Cover = site.Cover(novelSlug, doc)
 	log.Infof("Cover: %v", n.Cover)
 
-	n.Chapters = site.ChaptersList(doc)
-	log.Infof("Chapters found: %v", len(n.Chapters))
+	n.Volumes = site.VolumesList(doc)
+	log.Infof("Volumes found: %v", len(n.Volumes))
+
+	for _, v := range n.Volumes {
+		log.Debugf("%s, found: %v chapters", v.Title, len(*v.Chapters))
+	}
 
 	log.Infof("Getting Chapters Content")
 	site.Chapters(n)
+	log.Infof("Getting Chapters Content Done!")
 
 }
