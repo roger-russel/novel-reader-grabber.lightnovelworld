@@ -18,6 +18,9 @@ func Chapter(page io.Reader) string {
 	content := doc.Find(".chapter-content").First()
 
 	if content != nil {
+		content.Find("script").Remove()
+		content.Find("div.adsbox").Remove()
+
 		c, _ := content.Html()
 		return strings.TrimSpace(c)
 	}

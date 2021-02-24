@@ -36,7 +36,7 @@ func normalizeDirFlag(dir string) string {
 //normalizeFormatType
 func normalizeFormatType(format string) string {
 	ok := false
-	allowed := []string{"mobi"}
+	allowed := []string{"epub"}
 
 	format = strings.ToLower(format)
 

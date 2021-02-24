@@ -24,5 +24,14 @@ func Lightnovelworld(flags *cmd.Flags) (lightnovelworldCmd *cobra.Command) {
 		},
 	}
 
+	lightnovelworldCmd.AddCommand(&cobra.Command{
+		Use:   "info",
+		Short: "Get info about the novel",
+		Long:  `Get information about the novel: author, chapter numbers, etc`,
+		Run: func(cmd *cobra.Command, args []string) {
+			lightnovelworld.Info(flags.Novel)
+		},
+	})
+
 	return lightnovelworldCmd
 }

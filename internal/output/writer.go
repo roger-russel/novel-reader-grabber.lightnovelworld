@@ -3,6 +3,7 @@ package output
 import (
 	"fmt"
 
+	"github.com/roger-russel/novel-grabber/pkg/epub"
 	"github.com/roger-russel/novel-grabber/pkg/mobi"
 	"github.com/roger-russel/novel-grabber/pkg/structs/novel"
 	log "github.com/sirupsen/logrus"
@@ -14,6 +15,11 @@ func Writer(n *novel.Novel, format string, dir string) {
 	case "mobi":
 		log.Info("Writing mobi file")
 		mobi.Write(n, dir)
+
+	case "epub":
+		log.Info("Writing epub file")
+		epub.Write(n, dir)
+
 	default:
 		panic(fmt.Errorf("Unkonw output format: %v", format))
 	}

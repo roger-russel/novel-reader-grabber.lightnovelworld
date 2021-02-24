@@ -21,7 +21,7 @@ func ChaptersList(doc *goquery.Document) (nextURL string, chapters novel.Chapter
 
 		sNumber := strings.TrimSpace(s.Find(".chapter-no").Text())
 
-		number, err := strconv.Atoi(sNumber)
+		number, err := strconv.ParseFloat(sNumber, 32)
 
 		if err != nil {
 			log.WithFields(log.Fields{
@@ -48,7 +48,7 @@ func ChaptersList(doc *goquery.Document) (nextURL string, chapters novel.Chapter
 		}
 
 		chapters = append(chapters, novel.Chapter{
-			Number:         number,
+			Number:         float32(number),
 			OriginalNumber: sNumber,
 			Title:          title,
 			URL:            url,

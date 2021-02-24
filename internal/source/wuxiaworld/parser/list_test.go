@@ -52,47 +52,47 @@ func Test_normalizer(t *testing.T) {
 		url string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    string
-		wantInt int
-		wantErr bool
+		name      string
+		args      args
+		want      string
+		wantFloat float32
+		wantErr   bool
 	}{
 		{
 			name: "zero",
 			args: args{
 				url: "/novel/against-the-gods/atg-chapter-0",
 			},
-			want:    "0",
-			wantInt: 0,
-			wantErr: false,
+			want:      "0",
+			wantFloat: 0,
+			wantErr:   false,
 		},
 		{
 			name: "Devil number",
 			args: args{
 				url: "/novel/against-the-gods/atg-chapter-666",
 			},
-			want:    "666",
-			wantInt: 666,
-			wantErr: false,
+			want:      "666",
+			wantFloat: 666,
+			wantErr:   false,
 		},
 		{
 			name: "Float Number",
 			args: args{
 				url: "/novel/against-the-gods/atg-chapter-917-05",
 			},
-			want:    "917.05",
-			wantInt: 917,
-			wantErr: false,
+			want:      "917.05",
+			wantFloat: 917,
+			wantErr:   false,
 		},
 		{
 			name: "Error",
 			args: args{
 				url: "/novel/against-the-gods/atg-chapter-917s",
 			},
-			want:    "",
-			wantInt: 0,
-			wantErr: true,
+			want:      "",
+			wantFloat: 0,
+			wantErr:   true,
 		},
 	}
 	for _, tt := range tests {
@@ -105,8 +105,8 @@ func Test_normalizer(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("normalizer() got = %v, want %v", got, tt.want)
 			}
-			if got1 != tt.wantInt {
-				t.Errorf("normalizer() got1 = %v, want %v", got1, tt.wantInt)
+			if got1 != tt.wantFloat {
+				t.Errorf("normalizer() got1 = %v, want %v", got1, tt.wantFloat)
 			}
 		})
 	}

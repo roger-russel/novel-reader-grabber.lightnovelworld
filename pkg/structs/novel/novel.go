@@ -50,12 +50,12 @@ type Volume struct {
 
 //Chapter information
 type Chapter struct {
-	Title          string `json:"title"`
-	Number         int    `json:"number"`
-	OriginalNumber string `json:"original-number"`
-	URL            string `json:"url"`
-	Updated        string `json:"updated"`
-	Content        string `json:"content"`
+	Title          string  `json:"title"`
+	Number         float32 `json:"number"`
+	OriginalNumber string  `json:"original-number"`
+	URL            string  `json:"url"`
+	Updated        string  `json:"updated"`
+	Content        string  `json:"content"`
 }
 
 //Chapters list

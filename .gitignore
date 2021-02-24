@@ -16,3 +16,5 @@
 
 *.db
 *.mobi
+
+*__debug_bin

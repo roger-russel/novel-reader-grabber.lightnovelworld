@@ -2,6 +2,7 @@ package site
 
 import (
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/roger-russel/novel-grabber/internal/helpers"
@@ -12,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const pullSize int = 10
+const pullSize int = 2
 
 //ChaptersList get the novel info Page
 func ChaptersList(doc *goquery.Document) novel.Chapters {
@@ -82,7 +83,11 @@ func Chapters(n *novel.Novel) {
 		pl.Add(
 			func(index int, slug string, originalNumber string, URL string) func() {
 				return func() {
+
 					content := Chapter(slug, originalNumber, URL)
+
+					//Slow get frequency to try to avoid error 429 from site
+					time.Sleep(1 * time.Second)
 
 					ch <- chChapter{
 						Index:   index,

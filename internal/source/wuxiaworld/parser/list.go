@@ -97,7 +97,7 @@ func parseChapters(chapters *novel.Chapters, n int, c *goquery.Selection) {
 	})
 }
 
-func normalizer(url string) (string, int, error) {
+func normalizer(url string) (string, float32, error) {
 	var sNumber string
 
 	re := regexp.MustCompile("([0-9]+)(-([0-9]+))?$")
@@ -113,8 +113,8 @@ func normalizer(url string) (string, int, error) {
 		sNumber += "." + m[3]
 	}
 
-	number, err := strconv.Atoi(m[1])
+	number, err := strconv.ParseFloat(m[1], 32)
 
-	return sNumber, number, err
+	return sNumber, float32(number), err
 
 }

@@ -29,8 +29,8 @@ func Root(vf v.FullVersion) {
 	)
 
 	rootCmd.PersistentFlags().StringVarP(
-		&flags.FormatType, "format-type", "t", "mobi",
-		"The output format: -t mobi",
+		&flags.FormatType, "format-type", "t", "epub",
+		"The output format: -t epub",
 	)
 
 	rootCmd.PersistentFlags().StringVarP(

@@ -1,6 +1,7 @@
 package site
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/PuerkitoBio/goquery"
@@ -10,12 +11,17 @@ import (
 
 //InfoPage get the info page novel
 func InfoPage(novelSlug string) io.Reader {
-	infoPage, err := helpers.Download(URL + NOVEL + novelSlug)
+
+	url := URL + NOVEL + novelSlug
+
+	fmt.Println("URL:", url)
+
+	infoPage, err := helpers.Download(url)
 	helpers.Must(err)
 	return infoPage
 }
 
 //Info get novel information
-func Info(doc *goquery.Document) (title, author string) {
+func Info(doc *goquery.Document) (title, author string, chapters int) {
 	return parser.Info(doc)
 }
