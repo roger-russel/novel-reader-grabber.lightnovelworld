@@ -54,15 +54,16 @@ func Chapter(novelSlug string, originalNumber string, chapterURL string) string 
 		}
 
 		content = parser.Chapter(page)
+		content = strings.TrimSpace(content)
+		err = localstorage.WriteChapter(SOURCE, novelSlug, originalNumber, content)
 
+		if err != nil {
+			log.Warningf("Error Writing Chapter: %v%v, error:%v", URL, chapterURL, err)
+			return ""
+		}
 	}
 
-	content = strings.TrimSpace(content)
-
-	localstorage.WriteChapter(SOURCE, novelSlug, originalNumber, content)
-
 	return content
-
 }
 
 type chChapter struct {

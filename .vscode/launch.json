@@ -18,7 +18,7 @@
             "-n", "the-beginning-after-the-end-novel-09011258"
           ]
         },
-        {
+       {
           "name": "wuxiaworld",
           "type": "go",
           "request": "launch",

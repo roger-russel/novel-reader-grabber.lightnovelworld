@@ -1,16 +1,16 @@
 module github.com/roger-russel/novel-grabber
 
-go 1.14
+go 1.16
 
 require (
 	github.com/766b/mobi v0.0.0-20200528201125-c87aa9e3c890
-	github.com/Jeffail/tunny v0.0.0-20190930221602-f13eb662a36a
-	github.com/PuerkitoBio/goquery v1.5.1
-	github.com/bmaupin/go-epub v0.5.3
-	github.com/cvilsmeier/sqinn-go v1.1.0
-	github.com/google/go-cmp v0.2.0
+	github.com/PuerkitoBio/goquery v1.7.0
+	github.com/bmaupin/go-epub v0.7.0
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/gosimple/slug v1.9.0
-	github.com/labstack/gommon v0.3.0
-	github.com/sirupsen/logrus v1.6.0
-	github.com/spf13/cobra v1.0.0
+	github.com/jedib0t/go-pretty/v6 v6.2.2
+	github.com/sirupsen/logrus v1.8.1
+	github.com/spf13/cobra v1.1.3
+	github.com/stretchr/testify v1.6.1 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200605160147-a5ece683394c // indirect
 )
