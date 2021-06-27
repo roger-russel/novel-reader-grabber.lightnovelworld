@@ -45,7 +45,6 @@ func Chapter(novelSlug string, originalNumber string, chapterURL string) string 
 	content := string(baContent)
 
 	if !found {
-
 		page, err := helpers.Download(URL + chapterURL)
 
 		if err != nil {

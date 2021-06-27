@@ -2,9 +2,14 @@
 info:
 	@go run cmd/novel-grabber/main.go lightnovelworld info -n fantasy-simulator
 
-.PHONY: epub
-epub:
-	@go run cmd/novel-grabber/main.go lightnovelworld -n fantasy-simulator -d ~/Documents/Books/Novels
+.PHONY: epub/lightnovelworld
+epub/lightnovelworld:
+	@go run cmd/novel-grabber/main.go lightnovelworld -n tensei-shitara-slime-datta-ken-ln-17031322 -d ~/Documents/Books/Novels
+
+.PHONY: epub/wuxiaworld
+epub/wuxiaworld:
+	@go run cmd/novel-grabber/main.go wuxiaworld info -n wuxiaworld
+	@go run cmd/novel-grabber/main.go wuxiaworld -n martial-world -d ~/Documents/Books/Novels
 
 .PHONY: link
 link:

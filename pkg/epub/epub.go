@@ -25,19 +25,19 @@ func Write(pw progress.Writer, n *novel.Novel, dir string) {
 	defer trkVol.MarkAsDone()
 
 	if len(n.Volumes) < 1 {
-		fullFileName := dir + "01-" + n.Slug + "." + ext
+		fullFileName := dir + n.Slug + "." + ext
 		writeVolume(pw, fullFileName, n.Title, n.Cover, n.Author, &n.Chapters)
 		trkVol.Increment(1)
 		return
 	}
 
-	for _, v := range n.Volumes {
+	for i, v := range n.Volumes {
 		trkVol.Increment(1)
 		if len(*v.Chapters) < 1 {
 			continue
 		}
 
-		title := n.Title + " - " + v.Title
+		title := fmt.Sprintf("%s-volume-%d-%s", n.Title, i, v.Title)
 
 		slugTitle := slug.Make(title)
 		fullFileName := dir + slugTitle + "." + ext
